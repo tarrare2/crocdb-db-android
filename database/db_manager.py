@@ -88,7 +88,7 @@ def init_database():
 
     cur.execute('''
         CREATE TABLE platforms (
-            id TEXT PRIMARY KEY,
+            id TEXT PRIMARY KEY NOT NULL,
             brand TEXT,
             name TEXT
         )
@@ -96,7 +96,7 @@ def init_database():
 
     cur.execute('''
         CREATE TABLE entries (
-            slug TEXT PRIMARY KEY,
+            slug TEXT PRIMARY KEY NOT NULL,
             rom_id TEXT,
             search_key TEXT,
             title TEXT,
@@ -107,17 +107,16 @@ def init_database():
     ''')
 
     cur.execute('''
-        CREATE VIRTUAL TABLE entries_fts USING fts5(
+        CREATE VIRTUAL TABLE entries_fts USING fts4(
             search_key,
             content='entries',
-            content_rowid='rowid',
-            tokenize='trigram'
+            content_rowid='rowid'
         )
     ''')
 
     cur.execute('''
         CREATE TABLE regions (
-            id TEXT PRIMARY KEY,
+            id TEXT PRIMARY KEY NOT NULL,
             name TEXT
         )
     ''')
@@ -221,7 +220,7 @@ def insert_entry(entry: dict):
             entry.get('boxart_url')
         ))
 
-        # Insert into the FTS5 table
+        # Insert into the FTS4 table
         cur.execute('''
             INSERT INTO entries_fts (rowid, search_key)
             VALUES (last_insert_rowid(), ?)
