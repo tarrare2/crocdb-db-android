@@ -54,16 +54,14 @@ def create_slug(entry):
 
     return slug
 
-
 def create_search_key(title):
     """Generate a search-friendly key from the given title by normalizing and sanitizing it."""
     title = replace_invalid_chars(title)
     title = unidecode(title)
     title = title.lower()
-    title = re.sub(r"[^a-z0-9]", '', title)
-    title = title.strip()
-
-    return title
+    title = re.sub(r'[^\w\s]', ' ', title)
+    title = re.sub(r'\s+', ' ', title)
+    return title.strip()
 
 
 def size_bytes_to_str(size):
